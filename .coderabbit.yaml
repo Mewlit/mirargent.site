@@ -35,6 +35,7 @@ reviews:
     - '!node_modules/**'
     - '!.nuxt/**'
     - '!pnpm-lock.yaml'
+    - '!pnpm-workspace.yaml'
 
   # AIレビューアーに対する具体的な指示・レビュー基準
   instructions: |
