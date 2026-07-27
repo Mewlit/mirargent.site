@@ -40,6 +40,10 @@ export default defineAppConfig({
       handle: '@mLit',
       url: 'https://steamcommunity.com/profiles/76561198982746717/',
     },
+    form: {
+      name: 'Google Form',
+      url: 'https://forms.gle/jYFePsxtXYZekoxH8',
+    },
     rss: {
       name: 'mewlit Web Diary RSS Feed',
       url: 'https://mirargent.site/feed.xml',

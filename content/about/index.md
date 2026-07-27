@@ -33,6 +33,12 @@ updated: 2026-07-22
 
 :about-socials
 
+## 📧問い合わせ
+
+お問い合わせ・ご意見・ご質問等は以下フォームにお願いしますにゃ！
+
+:about-forms
+
 ## 参考
 
 ・ひらたけさんのブログ: [https://hiratake.dev](https://hiratake.dev)
