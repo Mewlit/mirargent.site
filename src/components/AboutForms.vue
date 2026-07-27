@@ -30,7 +30,7 @@ const socials = website.value.socials
     >
       <!-- アイコンのスペル修正: sinpleicons -> simple-icons -->
       <span
-        class="i-simple-icons-mail size-4 transition-transform duration-300 group-hover:scale-110"
+        class="i-simple-icons-formspree size-4 transition-transform duration-300 group-hover:scale-110"
       />
       <span class="text-sm font-semibold tracking-wider">{{
         socials.form.name
