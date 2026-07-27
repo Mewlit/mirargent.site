@@ -12,8 +12,6 @@ const props = withDefaults(defineProps<PageFooterProps>(), {
   next: () => ({ path: '', title: '', description: '', created: undefined }),
 })
 
-const website = useWebsite()
-
 /** 前後の投稿 */
 const surroundPost = computed(() => [
   props.prev.path && {
@@ -89,21 +87,6 @@ const surroundPost = computed(() => [
       </template>
     </div>
 
-    <div
-      class="flex flex-col items-center gap-4 rounded-lg border-2 border-slate-200 p-6 text-center dark:border-slate-800"
-    >
-      <h3 class="text-lg font-bold">投稿への感想などは Discord サーバへ</h3>
-      <p class="text-xs">
-        この投稿への感想などは、Discord
-        サーバにて受け付けております。もしよろしければ、以下のボタンよりご参加ください！
-      </p>
-      <NuxtLink
-        :to="website.socials.discord.url"
-        class="flex items-center gap-2 rounded-2xl bg-discord px-6 py-1.5 text-white transition-colors hover:bg-discord/80"
-      >
-        <span class="i-simple-icons-discord size-5" />
-        <span class="pb-0.5 text-xs font-bold">Discord に参加</span>
-      </NuxtLink>
-    </div>
+    <AboutForms />
   </footer>
 </template>

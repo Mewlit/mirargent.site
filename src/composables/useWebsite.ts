@@ -120,6 +120,17 @@ export const useWebsite = () => {
          */
         url: app.socials.steam.url,
       },
+      /** Google Forml */
+      form: {
+        /*
+         * 名前
+         */
+        name: app.socials.form.name,
+        /*
+         * URL
+         */
+        url: app.socials.form.url,
+      },
       /** RSS */
       rss: {
         /**
