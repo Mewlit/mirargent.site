@@ -20,13 +20,13 @@ export default defineEventHandler(async (event) => {
 
   /** RSSフィード */
   const feed = new Feed({
-    title: `${site.name || 'Hiratake Web'} Diary Feed`,
+    title: `${site.name || 'Mewlit Web'} Diary Feed`,
     description: blogIndexContent?.description || '',
     id: site.url,
     link: useTrailingSlash(`${site.url}/blog/`),
     language: site?.defaultLocale || 'ja',
     image: `${site.url}/logo.png`,
-    copyright: site?.name || 'Hiratake Web',
+    copyright: site?.name || 'Mewlit Web',
   })
   /** ブログの投稿 */
   // @ts-ignore: https://github.com/nuxt/nuxt/issues/29263
