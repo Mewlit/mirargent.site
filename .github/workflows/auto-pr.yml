@@ -1,0 +1,33 @@
+name: Auto Create PR from develop to main
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 最新のコミットメッセージを取得するステップ
+      - name: Get commit message
+        id: commit_msg
+        run: |
+          # 最新のコミットの1行目（Subject）を取得
+          MSG=$(git log -1 --pretty=format:"%s")
+          # 出力変数としてセット
+          echo "title=${MSG}" >> $GITHUB_OUTPUT
+
+      # 取得したコミットメッセージをtitleに指定してPR作成
+      - name: Create Pull Request to main
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: auto-sync/develop-to-main
+          base: main
+          title: ${{ steps.commit_msg.outputs.title }}
+          body: 'Automated PR to sync changes from `develop` into `main`.'
+          labels: 'automated-pr'
