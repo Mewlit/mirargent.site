@@ -223,8 +223,7 @@ const hasContentStats = computed(
     props.readTime !== undefined ||
     derivedCharCount.value > 0,
 )
-/** 文字数 */
-/** 単語数 */
+
 const toNumericValue = (
   value: number | string | undefined,
   fallback: number,
@@ -237,14 +236,17 @@ const toNumericValue = (
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
+/** 文字数 */
 const displayedCharCount = computed(() => {
   const value = props.charCount ?? derivedCharCount.value
   return toNumericValue(value, derivedCharCount.value)
 })
+/** 単語数 */
 const displayedWordCount = computed(() => {
   const value = props.wordCount ?? derivedWordCount.value
   return toNumericValue(value, derivedWordCount.value)
 })
+/** 読了完了目安時間 */
 const derivedReadTime = computed(() => {
   if (props.readTime !== undefined) {
     return typeof props.readTime === 'number'
