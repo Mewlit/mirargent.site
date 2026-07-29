@@ -54,7 +54,9 @@ export default <Partial<Config>>{
   plugins: [
     headlessUIPlugin,
     typographyPlugin,
-    iconsPlugin({ collections: getIconCollections(['ph', 'simple-icons']) }),
+    iconsPlugin({
+      collections: getIconCollections(['ph', 'simple-icons', 'pepicons-pop']),
+    }),
   ],
   darkMode: 'class',
 }

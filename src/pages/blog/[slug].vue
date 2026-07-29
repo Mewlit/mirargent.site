@@ -121,6 +121,7 @@ useSchemaOrg([
         :created="data.created"
         :updated="data.updated"
         :author="author"
+        :content="data.body"
       />
       <div class="content prose">
         <ContentRenderer :value="data">
