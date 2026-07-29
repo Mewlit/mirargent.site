@@ -1,0 +1,30 @@
+name: Auto Merge main into develop
+
+on:
+  push:
+    branches:
+      - main # mainブランチに更新（マージ等）があったら発火
+
+jobs:
+  sync-main-to-develop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # すべての履歴を取得
+
+      - name: Merge main into develop
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # developブランチを取得して切り替え
+          git checkout develop
+          git pull origin develop
+
+          # mainをdevelopにマージ
+          git merge origin/main --no-edit
+
+          # 変更をpush
+          git push origin develop
