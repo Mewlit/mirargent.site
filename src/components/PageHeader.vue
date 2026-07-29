@@ -19,6 +19,8 @@ type PageHeaderProps = {
     name: string
     icon: string
   }
+  /** Intl.Segmenter に渡すロケール（word 分割の既定値は 'ja'） */
+  segmenterLocale?: string
 }
 
 const props = withDefaults(defineProps<PageHeaderProps>(), {
@@ -30,6 +32,7 @@ const props = withDefaults(defineProps<PageHeaderProps>(), {
   content: undefined,
   readTime: undefined,
   author: () => ({ name: '', icon: '' }),
+  segmenterLocale: 'ja',
 })
 
 /** 投稿した日 */
@@ -131,7 +134,38 @@ const derivedWordCount = computed(() => {
     return 0
   }
 
-  return normalizedContentText.value.split(/\s+/).length
+  const text = normalizedContentText.value
+
+  // Intl.Segmenter (単語単位) が利用可能な場合はこれを使用し、
+  // 日本語などスペース区切りのない言語でも正確に単語数をカウントする。
+  // 実行時チェックで Intl.Segmenter の有無を確認。
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (typeof Intl !== 'undefined' && (Intl as any).Segmenter) {
+    try {
+      const locale = props.segmenterLocale ?? 'ja'
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const iterator = new (Intl as any).Segmenter(locale, {
+        granularity: 'word',
+      }).segment(text)
+      let count = 0
+      for (const seg of iterator) {
+        const token =
+          seg && typeof seg === 'object' && 'segment' in seg
+            ? seg.segment
+            : String(seg)
+        // 文字（アルファベット・漢字・仮名等）または数字を含むセグメントのみをカウント
+        if (token && /\p{L}|\p{N}/u.test(token)) {
+          count++
+        }
+      }
+      return count
+    } catch {
+      // エラー時はフォールバック処理（空白区切り）へ移行
+    }
+  }
+
+  // フォールバック: 従来の空白区切りによるカウント処理
+  return text.split(/\s+/).length
 })
 const hasContentStats = computed(
   () =>
