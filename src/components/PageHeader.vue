@@ -23,6 +23,8 @@ type PageHeaderProps = {
   segmenterLocale?: string
 }
 
+const TEXT_PER_MINUTE = 800
+
 const props = withDefaults(defineProps<PageHeaderProps>(), {
   title: '',
   created: undefined,
@@ -84,7 +86,25 @@ const extractTextFromContent = (value: unknown): string => {
       return ''
     }
 
+    if (type === 'minimal' && Array.isArray(record.children)) {
+      const children = record.children as unknown[]
+      return children.map((child) => extractTextFromContent(child)).join(' ')
+    }
+
     if (record.body !== undefined) {
+      if (record.body && typeof record.body === 'object') {
+        const bodyRecord = record.body as Record<string, unknown>
+        if (
+          bodyRecord.type === 'minimal' &&
+          Array.isArray(bodyRecord.children)
+        ) {
+          const children = bodyRecord.children as unknown[]
+          return children
+            .map((child) => extractTextFromContent(child))
+            .join(' ')
+        }
+      }
+
       const bodyText = extractTextFromContent(record.body)
       if (bodyText) {
         return bodyText
@@ -172,7 +192,7 @@ const hasContentStats = computed(
     props.charCount !== undefined ||
     props.wordCount !== undefined ||
     props.readTime !== undefined ||
-    props.content !== undefined,
+    derivedCharCount.value > 0,
 )
 /** 文字数 */
 /** 単語数 */
@@ -198,10 +218,20 @@ const displayedWordCount = computed(() => {
 })
 const derivedReadTime = computed(() => {
   if (props.readTime !== undefined) {
-    return `${toNumericValue(props.readTime, 0)} 分`
+    return typeof props.readTime === 'number'
+      ? `${props.readTime} 分`
+      : String(props.readTime)
   }
 
-  const minutes = Math.max(1, Math.ceil(displayedCharCount.value / 700))
+  const chars = displayedCharCount.value
+
+  // 1分未満（TEXT_PER_MINUTE 未満）の場合は秒表記
+  if (chars < TEXT_PER_MINUTE) {
+    const seconds = Math.max(1, Math.ceil((chars / TEXT_PER_MINUTE) * 60))
+    return `${seconds} 秒`
+  }
+
+  const minutes = Math.ceil(chars / TEXT_PER_MINUTE)
   return `${minutes} 分`
 })
 </script>

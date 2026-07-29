@@ -66,7 +66,7 @@ useSchemaOrg([
         :title="data.title"
         :updated="data.updated"
         :author="owner"
-        :content="data?.body ?? data"
+        :content="data.body"
       />
       <div class="content prose">
         <ContentRenderer :value="data">
