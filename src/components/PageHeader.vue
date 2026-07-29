@@ -86,22 +86,51 @@ const extractTextFromContent = (value: unknown): string => {
       return ''
     }
 
-    if (type === 'minimal' && Array.isArray(record.children)) {
-      const children = record.children as unknown[]
-      return children.map((child) => extractTextFromContent(child)).join(' ')
+    if (type === 'minimal') {
+      if (Array.isArray(record.value)) {
+        return record.value
+          .map((item) => {
+            if (typeof item === 'string') {
+              return extractTextFromContent(item)
+            }
+            if (Array.isArray(item) && item.length > 2) {
+              return extractTextFromContent(item.slice(2))
+            }
+            return ''
+          })
+          .join(' ')
+      }
+
+      if (Array.isArray(record.children)) {
+        const children = record.children as unknown[]
+        return children.map((child) => extractTextFromContent(child)).join(' ')
+      }
     }
 
     if (record.body !== undefined) {
       if (record.body && typeof record.body === 'object') {
         const bodyRecord = record.body as Record<string, unknown>
-        if (
-          bodyRecord.type === 'minimal' &&
-          Array.isArray(bodyRecord.children)
-        ) {
-          const children = bodyRecord.children as unknown[]
-          return children
-            .map((child) => extractTextFromContent(child))
-            .join(' ')
+        if (bodyRecord.type === 'minimal') {
+          if (Array.isArray(bodyRecord.value)) {
+            return bodyRecord.value
+              .map((item) => {
+                if (typeof item === 'string') {
+                  return extractTextFromContent(item)
+                }
+                if (Array.isArray(item) && item.length > 2) {
+                  return extractTextFromContent(item.slice(2))
+                }
+                return ''
+              })
+              .join(' ')
+          }
+
+          if (Array.isArray(bodyRecord.children)) {
+            const children = bodyRecord.children as unknown[]
+            return children
+              .map((child) => extractTextFromContent(child))
+              .join(' ')
+          }
         }
       }
 
