@@ -141,3 +141,10 @@ out
 
 # lefthook
 lefthook-local.yml
+
+# Obisidian
+.obsidian/
+content/blog/blogTemplate.md
+
+# Todo
+TODO.md
