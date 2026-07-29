@@ -6,6 +6,14 @@ type PageHeaderProps = {
   created?: Date | string
   /** 更新した日 */
   updated?: Date | string
+  /** 文字数 */
+  charCount?: number | string
+  /** 単語数 */
+  wordCount?: number | string
+  /** 本文 */
+  content?: unknown
+  /** 読了完了目安 */
+  readTime?: number | string
   /** 書いたひと */
   author?: {
     name: string
@@ -17,6 +25,10 @@ const props = withDefaults(defineProps<PageHeaderProps>(), {
   title: '',
   created: undefined,
   updated: undefined,
+  charCount: undefined,
+  wordCount: undefined,
+  content: undefined,
+  readTime: undefined,
   author: () => ({ name: '', icon: '' }),
 })
 
@@ -24,6 +36,140 @@ const props = withDefaults(defineProps<PageHeaderProps>(), {
 const createdDate = computed(() => useDatetimeFormat(props.created))
 /** 更新した日 */
 const updatedDate = computed(() => useDatetimeFormat(props.updated))
+
+const stripMarkdownSyntax = (value: string): string => {
+  return value
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/~~~[\s\S]*?~~~/g, ' ')
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/^\s{0,3}#{1,6}\s*/gm, '')
+    .replace(/^\s{0,3}(?:[-*+]|\d+\.)\s/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/[*_~`]/g, '')
+    .replace(/^\s*[-*_]{3,}\s*$/gm, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+const extractTextFromContent = (value: unknown): string => {
+  if (typeof value === 'string') {
+    return stripMarkdownSyntax(value)
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => extractTextFromContent(item)).join(' ')
+  }
+
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>
+    const type = typeof record.type === 'string' ? record.type : ''
+
+    if (
+      [
+        'image',
+        'img',
+        'code',
+        'codeInline',
+        'code_block',
+        'codeBlock',
+        'html',
+        'comment',
+      ].includes(type)
+    ) {
+      return ''
+    }
+
+    if (record.body !== undefined) {
+      const bodyText = extractTextFromContent(record.body)
+      if (bodyText) {
+        return bodyText
+      }
+    }
+
+    if (Array.isArray(record.children)) {
+      return record.children
+        .map((child) => extractTextFromContent(child))
+        .join(' ')
+    }
+
+    if (typeof record.text === 'string' && record.text.trim()) {
+      return stripMarkdownSyntax(record.text)
+    }
+
+    if (typeof record.value === 'string' && record.value.trim()) {
+      return stripMarkdownSyntax(record.value)
+    }
+
+    return Object.values(record)
+      .map((item) => extractTextFromContent(item))
+      .filter(Boolean)
+      .join(' ')
+  }
+
+  return ''
+}
+
+const contentSource = computed(() => {
+  if (props.content && typeof props.content === 'object') {
+    const record = props.content as Record<string, unknown>
+    if (record.body !== undefined) {
+      return record.body
+    }
+  }
+
+  return props.content
+})
+const contentText = computed(() => extractTextFromContent(contentSource.value))
+const normalizedContentText = computed(() =>
+  contentText.value.replace(/\s+/g, ' ').trim(),
+)
+const derivedCharCount = computed(() => normalizedContentText.value.length)
+const derivedWordCount = computed(() => {
+  if (!normalizedContentText.value) {
+    return 0
+  }
+
+  return normalizedContentText.value.split(/\s+/).length
+})
+const hasContentStats = computed(
+  () =>
+    props.charCount !== undefined ||
+    props.wordCount !== undefined ||
+    props.readTime !== undefined ||
+    props.content !== undefined,
+)
+/** 文字数 */
+/** 単語数 */
+const toNumericValue = (
+  value: number | string | undefined,
+  fallback: number,
+): number => {
+  if (value === undefined) {
+    return fallback
+  }
+
+  const parsed = typeof value === 'number' ? value : Number(value)
+  return Number.isFinite(parsed) ? parsed : fallback
+}
+
+const displayedCharCount = computed(() => {
+  const value = props.charCount ?? derivedCharCount.value
+  return toNumericValue(value, derivedCharCount.value)
+})
+const displayedWordCount = computed(() => {
+  const value = props.wordCount ?? derivedWordCount.value
+  return toNumericValue(value, derivedWordCount.value)
+})
+const derivedReadTime = computed(() => {
+  if (props.readTime !== undefined) {
+    return `${toNumericValue(props.readTime, 0)} 分`
+  }
+
+  const minutes = Math.max(1, Math.ceil(displayedCharCount.value / 700))
+  return `${minutes} 分`
+})
 </script>
 
 <template>
@@ -57,6 +203,28 @@ const updatedDate = computed(() => useDatetimeFormat(props.updated))
             <time :datetime="updatedDate.hyphen">
               {{ updatedDate.slash }}
             </time>
+          </dd>
+        </div>
+        <div
+          v-if="hasContentStats"
+          class="flex flex-col gap-1 rounded-lg bg-slate-100 px-4 py-2.5 dark:bg-slate-800"
+        >
+          <dt>単語数 / 文字数</dt>
+          <dd class="flex items-center gap-1 font-bold">
+            <span class="i-pepicons-pop-pen mt-0.5 size-5" />
+            <span> {{ displayedWordCount }} / {{ displayedCharCount }} </span>
+          </dd>
+        </div>
+        <div
+          v-if="hasContentStats"
+          class="flex flex-col gap-1 rounded-lg bg-slate-100 px-4 py-2.5 dark:bg-slate-800"
+        >
+          <dt>読了目安</dt>
+          <dd class="flex items-center gap-1 font-bold">
+            <span class="i-pepicons-pop-clock mt-0.5 size-5" />
+            <span>
+              {{ derivedReadTime }}
+            </span>
           </dd>
         </div>
         <div
