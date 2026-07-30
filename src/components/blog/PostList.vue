@@ -50,32 +50,25 @@ const items = computed(() =>
 
 <template>
   <div
-    class="mx-auto w-full max-w-5xl divide-y divide-slate-100 dark:divide-slate-800"
+    class="mx-auto grid w-full max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2"
   >
     <NuxtLink
       v-for="post in items"
       :key="post.path"
       :to="post.path"
-      class="group flex items-center gap-4 py-4 transition-opacity hover:opacity-70"
+      class="group relative flex flex-col gap-2 overflow-hidden rounded-2xl border border-primary/50 bg-primary/20 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.7),0_4px_24px_-8px_rgba(184,248,251,0.5)] backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:bg-primary/30 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),0_8px_32px_-8px_rgba(184,248,251,0.65)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-none dark:backdrop-blur-none dark:hover:bg-slate-800"
     >
-      <div class="min-w-0">
-        <h3 class="truncate font-medium text-slate-800 dark:text-white">
-          {{ post.title }}
-        </h3>
-        <p
-          class="mt-1 truncate text-xs text-slate-400 dark:text-slate-500 sm:text-sm"
-        >
-          {{ post.description }}
-        </p>
-      </div>
-
-      <div
-        class="mx-2 hidden h-px flex-1 border-t border-dashed border-slate-300 dark:border-slate-700 sm:block"
-      />
-
+      <h3 class="line-clamp-2 font-medium text-slate-800 dark:text-white">
+        {{ post.title }}
+      </h3>
+      <p
+        class="line-clamp-2 text-xs text-slate-600 dark:text-slate-500 sm:text-sm"
+      >
+        {{ post.description }}
+      </p>
       <time
         :datetime="post.created.hyphen"
-        class="shrink-0 whitespace-nowrap text-xs text-slate-400 dark:text-slate-500"
+        class="mt-auto shrink-0 whitespace-nowrap text-xs text-slate-500 dark:text-slate-500"
       >
         {{ post.created.slash }}
       </time>

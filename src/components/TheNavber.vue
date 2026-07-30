@@ -10,6 +10,7 @@ const { styles } = useFixedHeader(headerRef)
 const website = useWebsite()
 const colorMode = useColorMode()
 const { copy } = useClipboard({ source: website.value.socials.rss.url })
+const { addToast } = useToast()
 
 /** ウェブサイトの名前 */
 const name = website.value.name
@@ -23,23 +24,16 @@ const isDark = computed<boolean>({
 /** ソーシャルリンク */
 const socials = website.value.socials
 
-/** RSSフィードコピー通知ツールチップの表示状態 */
-const isVisibleRssFeedCopyTooltip = ref<boolean>(false)
-
 /** RSSフィードのURLをコピーする */
 const rssFeedCopy = () => {
   copy()
-  isVisibleRssFeedCopyTooltip.value = true
+  addToast({
+    title: 'RSSをコピーしました',
+    description:
+      'RSS購読アプリ等に登録することでブログの更新があった際に通知を受け取れます。',
+    type: 'success',
+  })
 }
-
-// 3秒後にツールチップを非表示にする
-whenever(
-  () => isVisibleRssFeedCopyTooltip.value,
-  () =>
-    useTimeoutFn(() => {
-      isVisibleRssFeedCopyTooltip.value = false
-    }, 3000),
-)
 
 // ナビゲーションメニュー定義（動的データとアイコンを紐付け）
 const items = computed(() => [
@@ -71,9 +65,9 @@ const items = computed(() => [
 
 <template>
   <div ref="headerRef" :style="styles" class="fixed top-0 z-50 w-full">
-    <nav class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <nav class="mx-auto w-full px-4 sm:px-6 lg:px-8">
       <ul
-        class="my-4 flex items-center gap-1 rounded-full bg-primary/30 px-4 py-1.5 text-sm font-medium text-gray-800 shadow-lg shadow-gray-800/5 ring-1 ring-gray-900/5 backdrop-blur dark:bg-gray-800/5 dark:text-gray-200 dark:ring-white/20"
+        class="my-4 flex items-center gap-1 rounded-full border border-primary/20 bg-white/70 px-4 py-1.5 text-sm font-medium text-slate-800 shadow-[0_18px_50px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 backdrop-blur-xl dark:border-primary/20 dark:bg-slate-900/70 dark:text-slate-200 dark:ring-white/10"
       >
         <!-- ロゴエリア -->
         <li class="mr-2 flex items-center">
@@ -165,20 +159,10 @@ const items = computed(() => [
           <button
             :title="socials.rss.name"
             aria-label="RSSフィードのURLをコピーする"
-            class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-white/10"
+            class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-primary/10 dark:hover:bg-white/10"
             @click="rssFeedCopy"
           >
             <span class="i-ph-rss-bold size-4" />
-
-            <!-- コピー完了通知ツールチップ -->
-            <span
-              :class="[
-                isVisibleRssFeedCopyTooltip ? 'opacity-100' : 'opacity-0',
-              ]"
-              class="pointer-events-none absolute -bottom-8 whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs text-white shadow-md transition-opacity dark:bg-white dark:text-gray-900"
-            >
-              URLをコピーしました
-            </span>
           </button>
 
           <!-- ダークモードトグル -->

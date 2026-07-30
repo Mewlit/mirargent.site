@@ -24,7 +24,7 @@ const props = defineProps<HomeBlogProps>()
         {{ props.description }}
       </p>
 
-      <BlogPostList :limit="5" />
+      <BlogPostList :limit="4" />
     </div>
 
     <div class="mt-6 flex items-center justify-center text-sm">
