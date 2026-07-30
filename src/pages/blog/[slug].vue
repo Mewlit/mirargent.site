@@ -63,28 +63,13 @@ if (error.value || blogError.value || surroundError.value) {
 const name = website.value.name
 const description = website.value.description
 const author = website.value.owner
+const CHARS_PER_MINUTE: number = 600
+/** 描画済み DOM から文字数を再計算する処理 */
 
-/** 読了時間の計算処理 */
-const charCount = ref(0)
-const readingTime = computed(() => {
-  if (contentRef.value) {
-    return {
-      charCount: charCount.value,
-      // 600文字/分
-      minutes: charCount.value / 600,
-    }
-  }
-  return {
-    charCount: 0,
-    minutes: 0,
-  }
-})
-
-// DOM マウント後に実際の描画テキストから文字数を取得
-onMounted(async () => {
+const updateCharCount = async () => {
   await nextTick()
   if (contentRef.value) {
-    // クローンを作成してコードブロック等を除外したい場合の処理
+    // クローンを作成してコードブロック等を除外
     const clone = contentRef.value.cloneNode(true) as HTMLElement
     clone
       .querySelectorAll('pre, code, script, style')
@@ -93,8 +78,33 @@ onMounted(async () => {
     // 空白・改行を除去した文字数をセット
     const textContent = clone.textContent?.replace(/\s+/g, '') || ''
     charCount.value = textContent.length
+  } else {
+    charCount.value = 0
+  }
+}
+
+/** 読了時間の計算処理 */
+const charCount = ref(0)
+const readingTime = computed(() => {
+  if (charCount.value <= 0) {
+    return {
+      undefined,
+    }
+  }
+  return {
+    charCount: charCount.value,
+    // 600文字/分
+    minutes: charCount.value / CHARS_PER_MINUTE,
   }
 })
+
+/** 初回マウント時 */
+onMounted(updateCharCount)
+/** 記事間の遷移時 */
+watch(
+  () => route.path,
+  () => updateCharCount(),
+)
 
 /** 前の投稿 */
 const prev = computed(() => {

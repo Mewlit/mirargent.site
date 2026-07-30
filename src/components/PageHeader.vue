@@ -20,7 +20,6 @@ type PageHeaderProps = {
 const props = withDefaults(defineProps<PageHeaderProps>(), {
   title: '',
   created: undefined,
-  updated: undefined,
   content: undefined,
   readingTime: undefined,
   author: () => ({ name: '', icon: '' }),
@@ -53,23 +52,23 @@ const createdDate = computed(() => useDatetimeFormat(props.created))
           </dd>
         </div>
         <div
-          v-if="readingTime"
+          v-if="readingTime && readingTime.charCount > 0"
           class="flex flex-col gap-1 rounded-lg bg-primary/40 px-4 py-2.5 dark:bg-slate-800/60"
         >
           <dt>文字数</dt>
           <dd class="flex items-center gap-1 font-bold">
             <span class="i-pepicons-pop-pen mt-0.5 size-5" />
-            <span> {{ readingTime.charCount?.toLocaleString() }}文字</span>
+            <span> {{ readingTime.charCount.toLocaleString() }}文字</span>
           </dd>
         </div>
         <div
           v-if="readingTime"
           class="flex flex-col gap-1 rounded-lg bg-primary/40 px-4 py-2.5 dark:bg-slate-800/60"
         >
-          <dt>読了目安</dt>
+          <dt>読了まで</dt>
           <dd class="flex items-center gap-1 font-bold">
             <span class="i-pepicons-pop-clock mt-0.5 size-5" />
-            <span> {{ readingTime.minutes.toFixed(2) }}分 </span>
+            <span> 約{{ readingTime.minutes?.toFixed(2) }}分 </span>
           </dd>
         </div>
         <div
