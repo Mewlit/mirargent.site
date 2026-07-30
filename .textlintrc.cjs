@@ -7,7 +7,6 @@ module.exports = {
       keys: [
         { name: 'title', required: true },
         { name: 'created', required: true },
-        { name: 'updated', required: true },
       ],
     },
     // 括弧が対になっているかチェック
