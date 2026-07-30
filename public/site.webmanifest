@@ -1,6 +1,6 @@
 {
-  "name": "Hiratake",
-  "short_name": "Hiratake",
+  "name": "Mewlit",
+  "short_name": "Mewlit",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,6 +13,6 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#a83d3d",
-  "background_color": "#a83d3d"
+  "theme_color": "#B8F8FB",
+  "background_color": "#B8F8FB"
 }
