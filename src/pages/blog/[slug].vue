@@ -8,6 +8,10 @@ type SurroundItem = ContentNavigationItem & {
 
 const website = useWebsite()
 const route = useRoute()
+
+// 記事描画要素を参照するための DOM Ref
+const contentRef = ref<HTMLElement | null>(null)
+
 const { data, error } = await useAsyncData(
   pathToUseAsyncDataKey(route.path),
   () => {
@@ -22,10 +26,12 @@ const { data, error } = await useAsyncData(
     }
   },
 )
+
 const { data: blogData, error: blogError } = await useAsyncData(
   pathToUseAsyncDataKey('/blog'),
   () => queryCollection('diary').path('/blog').first(),
 )
+
 const { data: surround, error: surroundError } = await useAsyncData(
   pathToUseAsyncDataKey(route.path, 'surround'),
   () => {
@@ -53,12 +59,61 @@ if (error.value || blogError.value || surroundError.value) {
   })
 }
 
-/** ウェブサイトの名前 */
+/** ウェブサイトの名前 / 概要 / 投稿者 */
 const name = website.value.name
-/** ウェブサイトの概要 */
 const description = website.value.description
-/** 投稿者 */
 const author = website.value.owner
+const CHARS_PER_MINUTE: number = 600
+
+/** 表示上の文字単位（書記素クラスタ）で文字数を数える */
+const countGraphemes = (text: string): number => {
+  if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
+    const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+    return Array.from(segmenter.segment(text)).length
+  }
+  // Intl.Segmenter 未対応環境向けの簡易フォールバック
+  return Array.from(text).length
+}
+
+/** 描画済み DOM から文字数を再計算する処理 */
+const updateCharCount = async () => {
+  await nextTick()
+  if (contentRef.value) {
+    // クローンを作成してコードブロック等を除外
+    const clone = contentRef.value.cloneNode(true) as HTMLElement
+    clone
+      .querySelectorAll('pre, code, script, style')
+      .forEach((el) => el.remove())
+
+    // 空白・改行を除去した文字数をセット
+    const textContent = clone.textContent?.replace(/\s+/g, '') || ''
+    charCount.value = countGraphemes(textContent)
+  } else {
+    charCount.value = 0
+  }
+}
+
+/** 読了時間の計算処理 */
+const charCount = ref(0)
+const readingTime = computed(() => {
+  if (charCount.value <= 0) {
+    return undefined
+  }
+  return {
+    charCount: charCount.value,
+    // 600文字/分
+    minutes: charCount.value / CHARS_PER_MINUTE,
+  }
+})
+
+/** 初回マウント時 */
+onMounted(updateCharCount)
+/** 記事間の遷移時 */
+watch(
+  () => route.path,
+  () => updateCharCount(),
+)
+
 /** 前の投稿 */
 const prev = computed(() => {
   if (surround.value && surround.value[0]) {
@@ -69,10 +124,10 @@ const prev = computed(() => {
       description: val.description || '',
       created: val.created,
     }
-  } else {
-    return undefined
   }
+  return undefined
 })
+
 /** 次の投稿 */
 const next = computed(() => {
   if (surround.value && surround.value[1]) {
@@ -83,9 +138,8 @@ const next = computed(() => {
       description: val.description || '',
       created: val.created,
     }
-  } else {
-    return undefined
   }
+  return undefined
 })
 
 useSeoMeta({
@@ -93,6 +147,7 @@ useSeoMeta({
   description: () => data.value?.description || description,
   ogType: 'article',
 })
+
 useSchemaOrg([
   defineBreadcrumb({
     itemListElement: [
@@ -107,7 +162,6 @@ useSchemaOrg([
   defineArticle({
     '@type': 'BlogPosting',
     datePublished: data.value?.created ?? undefined,
-    dateModified: data.value?.updated ?? undefined,
     author: [{ name: author.name, url: author.url }],
   }),
 ])
@@ -119,11 +173,11 @@ useSchemaOrg([
       <PageHeader
         :title="data.title"
         :created="data.created"
-        :updated="data.updated"
         :author="author"
         :content="data.body"
+        :reading-time="readingTime"
       />
-      <div class="content prose">
+      <div ref="contentRef" class="content prose">
         <ContentRenderer :value="data">
           <template #empty>
             <DocumentEmpty />
