@@ -65,6 +65,16 @@ const description = website.value.description
 const author = website.value.owner
 const CHARS_PER_MINUTE: number = 600
 
+/** 表示上の文字単位（書記素クラスタ）で文字数を数える */
+const countGraphemes = (text: string): number => {
+  if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
+    const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+    return Array.from(segmenter.segment(text)).length
+  }
+  // Intl.Segmenter 未対応環境向けの簡易フォールバック
+  return Array.from(text).length
+}
+
 /** 描画済み DOM から文字数を再計算する処理 */
 const updateCharCount = async () => {
   await nextTick()
@@ -77,7 +87,7 @@ const updateCharCount = async () => {
 
     // 空白・改行を除去した文字数をセット
     const textContent = clone.textContent?.replace(/\s+/g, '') || ''
-    charCount.value = textContent.length
+    charCount.value = countGraphemes(textContent)
   } else {
     charCount.value = 0
   }
