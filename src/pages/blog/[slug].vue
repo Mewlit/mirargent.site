@@ -152,7 +152,6 @@ useSchemaOrg([
   defineArticle({
     '@type': 'BlogPosting',
     datePublished: data.value?.created ?? undefined,
-    dateModified: data.value?.updated ?? undefined,
     author: [{ name: author.name, url: author.url }],
   }),
 ])
@@ -164,7 +163,6 @@ useSchemaOrg([
       <PageHeader
         :title="data.title"
         :created="data.created"
-        :updated="data.updated"
         :author="author"
         :content="data.body"
         :reading-time="readingTime"
