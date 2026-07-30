@@ -21,7 +21,12 @@ useHead({
   >
     <SeoDefault />
     <NuxtRouteAnnouncer />
-    <NuxtLoadingIndicator :height="2" :color="website.themeColor" />
+    <NuxtLoadingIndicator
+      :color="website.themeColor"
+      :height="5"
+      :duration="3000"
+      :throttle="1"
+    />
     <CursorFollower />
     <ToastViewport />
 
