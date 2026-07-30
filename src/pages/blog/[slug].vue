@@ -8,6 +8,10 @@ type SurroundItem = ContentNavigationItem & {
 
 const website = useWebsite()
 const route = useRoute()
+
+// 記事描画要素を参照するための DOM Ref
+const contentRef = ref<HTMLElement | null>(null)
+
 const { data, error } = await useAsyncData(
   pathToUseAsyncDataKey(route.path),
   () => {
@@ -22,10 +26,12 @@ const { data, error } = await useAsyncData(
     }
   },
 )
+
 const { data: blogData, error: blogError } = await useAsyncData(
   pathToUseAsyncDataKey('/blog'),
   () => queryCollection('diary').path('/blog').first(),
 )
+
 const { data: surround, error: surroundError } = await useAsyncData(
   pathToUseAsyncDataKey(route.path, 'surround'),
   () => {
@@ -53,12 +59,43 @@ if (error.value || blogError.value || surroundError.value) {
   })
 }
 
-/** ウェブサイトの名前 */
+/** ウェブサイトの名前 / 概要 / 投稿者 */
 const name = website.value.name
-/** ウェブサイトの概要 */
 const description = website.value.description
-/** 投稿者 */
 const author = website.value.owner
+
+/** 読了時間の計算処理 */
+const charCount = ref(0)
+const readingTime = computed(() => {
+  if (contentRef.value) {
+    return {
+      charCount: charCount.value,
+      // 600文字/分
+      minutes: charCount.value / 600,
+    }
+  }
+  return {
+    charCount: 0,
+    minutes: 0,
+  }
+})
+
+// DOM マウント後に実際の描画テキストから文字数を取得
+onMounted(async () => {
+  await nextTick()
+  if (contentRef.value) {
+    // クローンを作成してコードブロック等を除外したい場合の処理
+    const clone = contentRef.value.cloneNode(true) as HTMLElement
+    clone
+      .querySelectorAll('pre, code, script, style')
+      .forEach((el) => el.remove())
+
+    // 空白・改行を除去した文字数をセット
+    const textContent = clone.textContent?.replace(/\s+/g, '') || ''
+    charCount.value = textContent.length
+  }
+})
+
 /** 前の投稿 */
 const prev = computed(() => {
   if (surround.value && surround.value[0]) {
@@ -69,10 +106,10 @@ const prev = computed(() => {
       description: val.description || '',
       created: val.created,
     }
-  } else {
-    return undefined
   }
+  return undefined
 })
+
 /** 次の投稿 */
 const next = computed(() => {
   if (surround.value && surround.value[1]) {
@@ -83,9 +120,8 @@ const next = computed(() => {
       description: val.description || '',
       created: val.created,
     }
-  } else {
-    return undefined
   }
+  return undefined
 })
 
 useSeoMeta({
@@ -93,6 +129,7 @@ useSeoMeta({
   description: () => data.value?.description || description,
   ogType: 'article',
 })
+
 useSchemaOrg([
   defineBreadcrumb({
     itemListElement: [
@@ -122,8 +159,9 @@ useSchemaOrg([
         :updated="data.updated"
         :author="author"
         :content="data.body"
+        :reading-time="readingTime"
       />
-      <div class="content prose">
+      <div ref="contentRef" class="content prose">
         <ContentRenderer :value="data">
           <template #empty>
             <DocumentEmpty />

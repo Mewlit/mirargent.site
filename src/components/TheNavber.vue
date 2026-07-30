@@ -73,7 +73,7 @@ const items = computed(() => [
   <div ref="headerRef" :style="styles" class="fixed top-0 z-50 w-full">
     <nav class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
       <ul
-        class="my-4 flex items-center gap-1 rounded-full bg-white/90 px-4 py-1.5 text-sm font-medium text-gray-800 shadow-lg shadow-gray-800/5 ring-1 ring-gray-900/5 backdrop-blur dark:bg-gray-800/90 dark:text-gray-200 dark:ring-white/20"
+        class="my-4 flex items-center gap-1 rounded-full bg-primary/30 px-4 py-1.5 text-sm font-medium text-gray-800 shadow-lg shadow-gray-800/5 ring-1 ring-gray-900/5 backdrop-blur dark:bg-gray-800/5 dark:text-gray-200 dark:ring-white/20"
       >
         <!-- ロゴエリア -->
         <li class="mr-2 flex items-center">
