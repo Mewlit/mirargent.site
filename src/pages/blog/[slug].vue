@@ -64,8 +64,8 @@ const name = website.value.name
 const description = website.value.description
 const author = website.value.owner
 const CHARS_PER_MINUTE: number = 600
-/** 描画済み DOM から文字数を再計算する処理 */
 
+/** 描画済み DOM から文字数を再計算する処理 */
 const updateCharCount = async () => {
   await nextTick()
   if (contentRef.value) {
@@ -87,9 +87,7 @@ const updateCharCount = async () => {
 const charCount = ref(0)
 const readingTime = computed(() => {
   if (charCount.value <= 0) {
-    return {
-      undefined,
-    }
+    return undefined
   }
   return {
     charCount: charCount.value,

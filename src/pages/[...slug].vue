@@ -62,12 +62,7 @@ useSchemaOrg([
 <template>
   <main v-if="data" class="main mt-12 max-w-3xl md:mt-20">
     <article class="flex flex-col gap-14">
-      <PageHeader
-        :title="data.title"
-        :updated="data.updated"
-        :author="owner"
-        :content="data.body"
-      />
+      <PageHeader :title="data.title" :author="owner" :content="data.body" />
       <div class="content prose">
         <ContentRenderer :value="data">
           <template #empty>
