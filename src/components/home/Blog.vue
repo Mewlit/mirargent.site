@@ -19,7 +19,7 @@ const props = defineProps<HomeBlogProps>()
 
     <div class="flex flex-col gap-8">
       <p
-        class="max-w-2xl text-sm leading-relaxed text-gray-500 dark:text-gray-400"
+        class="max-w-2xl text-sm leading-relaxed text-gray-500 dark:text-white"
       >
         {{ props.description }}
       </p>

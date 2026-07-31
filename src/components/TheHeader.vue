@@ -20,11 +20,12 @@ const socials = website.value.socials
 /** グローバルナビゲーションの項目 */
 const menu = website.value.header.menu
 /** RSSフィードのURLをコピーする */
-const rssFeedCopy = () => {
-  copy()
+const rssFeedCopy = async () => {
+  await copy()
   addToast({
     title: 'RSSをコピーしました',
-    description: '更新通知を受け取れる状態にしました。',
+    description:
+      'RSS購読アプリ等に登録することでブログの更新があった際に通知を受け取れます。',
     type: 'success',
   })
 }

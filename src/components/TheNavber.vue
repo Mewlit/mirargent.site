@@ -25,8 +25,8 @@ const isDark = computed<boolean>({
 const socials = website.value.socials
 
 /** RSSフィードのURLをコピーする */
-const rssFeedCopy = () => {
-  copy()
+const rssFeedCopy = async () => {
+  await copy()
   addToast({
     title: 'RSSをコピーしました',
     description:
@@ -67,7 +67,7 @@ const items = computed(() => [
   <div ref="headerRef" :style="styles" class="fixed top-0 z-50 w-full">
     <nav class="mx-auto w-full px-4 sm:px-6 lg:px-8">
       <ul
-        class="my-4 flex items-center gap-1 rounded-full border border-primary/20 bg-white/70 px-4 py-1.5 text-sm font-medium text-slate-800 shadow-[0_18px_50px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 backdrop-blur-xl dark:border-primary/20 dark:bg-slate-900/70 dark:text-slate-200 dark:ring-white/10"
+        class="my-4 flex items-center gap-1 rounded-full border border-primary/20 bg-white/20 px-4 py-1.5 text-sm font-medium text-slate-800 shadow-[0_18px_50px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 backdrop-blur-xl dark:border-primary/20 dark:bg-slate-900/70 dark:text-slate-200 dark:ring-white/10"
       >
         <!-- ロゴエリア -->
         <li class="mr-2 flex items-center">

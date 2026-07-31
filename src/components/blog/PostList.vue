@@ -62,13 +62,13 @@ const items = computed(() =>
         {{ post.title }}
       </h3>
       <p
-        class="line-clamp-2 text-xs text-slate-600 dark:text-slate-500 sm:text-sm"
+        class="line-clamp-2 text-xs text-slate-600 dark:text-slate-300 sm:text-sm"
       >
         {{ post.description }}
       </p>
       <time
         :datetime="post.created.hyphen"
-        class="mt-auto shrink-0 whitespace-nowrap text-xs text-slate-500 dark:text-slate-500"
+        class="mt-auto shrink-0 whitespace-nowrap text-xs text-slate-500 dark:text-slate-400"
       >
         {{ post.created.slash }}
       </time>

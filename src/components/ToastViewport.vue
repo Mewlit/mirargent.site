@@ -6,7 +6,11 @@ const { toasts, dismissToast } = useToast()
   <div
     class="pointer-events-none fixed inset-x-0 top-4 z-[60] flex justify-center px-4"
   >
-    <div class="flex w-full max-w-2xl flex-col gap-3">
+    <div
+      class="flex w-full max-w-2xl flex-col gap-3"
+      role="status"
+      aria-atomic="true"
+    >
       <transition-group name="toast" tag="div" class="flex flex-col gap-3">
         <div
           v-for="toast in toasts"
