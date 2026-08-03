@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import { useClipboardCopy } from '../composables/useClipboardCopy'
+
 const website = useWebsite()
 const year = useDateFormat(new Date(), 'YYYY')
-const { copy } = useClipboard({ source: website.value.socials.rss.url })
+const { copyText } = useClipboardCopy()
 
 /** ウェブサイトの名前 */
 const name = website.value.name
@@ -9,28 +11,18 @@ const name = website.value.name
 const socials = website.value.socials
 /** フッターナビゲーションの項目 */
 const menu = website.value.footer.menu
-/** RSSフィードのURLをコピーしたことを通知するツールチップを表示するか */
-const isVisibleRssFeedCopyTooltip = ref<boolean>(false)
 /** RSSフィードのURLをコピーする */
-const rssFeedCopy = () => {
-  copy()
-  isVisibleRssFeedCopyTooltip.value = true
+const rssFeedCopy = async () => {
+  await copyText(website.value.socials.rss.url)
 }
-
-// 一定時間経過でツールチップを非表示にする
-whenever(
-  () => isVisibleRssFeedCopyTooltip.value,
-  () =>
-    useTimeoutFn(() => {
-      isVisibleRssFeedCopyTooltip.value = false
-    }, 3000),
-)
 </script>
 
 <template>
-  <footer class="mt-20 rounded-t-3xl bg-slate-100 py-20 dark:bg-slate-800">
+  <footer
+    class="mt-20 border-t border-primary/10 bg-gradient-to-br from-primary/10 via-white to-white py-20 dark:from-primary/10 dark:via-slate-900 dark:to-slate-900"
+  >
     <div
-      class="mx-auto box-content flex max-w-7xl flex-col items-start justify-between gap-8 px-4 md:flex-row md:items-center md:px-6"
+      class="mx-auto flex w-full flex-col items-start justify-between gap-8 px-4 md:flex-row md:items-center md:px-6 lg:px-8"
     >
       <div class="flex flex-col gap-5">
         <nav>
@@ -75,18 +67,10 @@ whenever(
           <button
             :title="socials.rss.name"
             aria-label="RSSフィードのURLをコピーする"
-            class="relative flex size-8 items-center justify-center rounded before:absolute before:size-full before:rounded before:bg-current before:opacity-0 before:transition-opacity hover:before:opacity-20"
+            class="relative flex size-8 items-center justify-center rounded before:absolute before:size-full before:rounded before:bg-primary/10 before:opacity-0 before:transition-opacity hover:before:opacity-20"
             @click="() => rssFeedCopy()"
           >
             <span class="i-ph-rss-bold size-5" />
-            <span
-              :class="[
-                isVisibleRssFeedCopyTooltip ? 'opacity-100' : 'opacity-0',
-              ]"
-              class="pointer-events-none absolute -top-5 whitespace-nowrap rounded bg-black/70 px-2 py-1 text-xs text-white transition-opacity dark:bg-white/80 dark:text-slate-900"
-            >
-              URLをコピーしました
-            </span>
           </button>
         </div>
       </div>

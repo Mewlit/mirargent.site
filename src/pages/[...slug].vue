@@ -60,9 +60,14 @@ useSchemaOrg([
 </script>
 
 <template>
-  <main v-if="data" class="main mt-12 max-w-3xl md:mt-20">
+  <main v-if="data" class="main max-w-7xl gap-16 md:gap-20">
     <article class="flex flex-col gap-14">
-      <PageHeader :title="data.title" :author="owner" :content="data.body" />
+      <PageHeader
+        :title="data.title"
+        :created="data.created"
+        :author="owner"
+        :content="data.body"
+      />
       <div class="content prose">
         <ContentRenderer :value="data">
           <template #empty>

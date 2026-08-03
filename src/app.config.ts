@@ -67,5 +67,5 @@ export default defineAppConfig({
     ],
   },
   /** 一覧画面に表示するページあたりの投稿数 */
-  itemPerPage: 20,
+  itemPerPage: 10,
 })

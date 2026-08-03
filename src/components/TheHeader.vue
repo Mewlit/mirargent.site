@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 // Components
 import { Switch } from '@headlessui/vue'
+import { useClipboardCopy } from '../composables/useClipboardCopy'
 
 const website = useWebsite()
 const colorMode = useColorMode()
 const [isVisibleOverlay, toggleOverlay] = useToggle()
-const { copy } = useClipboard({ source: website.value.socials.rss.url })
+const { copyText } = useClipboardCopy()
 
 /** ウェブサイトの名前 */
 const name = website.value.name
@@ -18,27 +19,15 @@ const isDark = computed<boolean>({
 const socials = website.value.socials
 /** グローバルナビゲーションの項目 */
 const menu = website.value.header.menu
-/** RSSフィードのURLをコピーしたことを通知するツールチップを表示するか */
-const isVisibleRssFeedCopyTooltip = ref<boolean>(false)
 /** RSSフィードのURLをコピーする */
-const rssFeedCopy = () => {
-  copy()
-  isVisibleRssFeedCopyTooltip.value = true
+const rssFeedCopy = async () => {
+  await copyText(website.value.socials.rss.url)
 }
-
-// 一定時間経過でツールチップを非表示にする
-whenever(
-  () => isVisibleRssFeedCopyTooltip.value,
-  () =>
-    useTimeoutFn(() => {
-      isVisibleRssFeedCopyTooltip.value = false
-    }, 3000),
-)
 </script>
 
 <template>
   <header
-    class="relative z-10 mx-auto box-content flex h-11 max-w-7xl justify-between px-4 pt-6 text-primary dark:text-white md:h-14 md:px-6 md:pt-8"
+    class="relative z-10 mx-auto box-content flex h-11 w-full justify-between px-4 pt-6 text-primary dark:text-white md:h-14 md:px-6 md:pt-8"
   >
     <NuxtLink
       :title="`${name} トップページ`"
@@ -86,7 +75,7 @@ whenever(
           ? 'pointer-events-auto text-white opacity-100'
           : 'pointer-events-none opacity-0',
       ]"
-      class="fixed inset-0 z-40 bg-white px-8 pt-20 transition-opacity before:absolute before:inset-0 before:bg-slate-900 dark:bg-slate-900 dark:before:bg-black md:pointer-events-auto md:relative md:inset-auto md:flex md:items-center md:gap-4 md:rounded-[2rem] md:border-2 md:border-primary md:py-0 md:pl-6 md:pr-9 md:text-inherit md:opacity-100 md:shadow-xl md:transition-none md:before:hidden md:dark:shadow-slate-200/10"
+      class="fixed inset-0 z-40 bg-white/80 px-8 pt-20 backdrop-blur-xl transition-opacity before:absolute before:inset-0 before:bg-slate-900/90 dark:bg-slate-900/80 dark:before:bg-black md:pointer-events-auto md:relative md:inset-auto md:flex md:items-center md:gap-4 md:rounded-[2rem] md:border md:border-primary/20 md:bg-white/70 md:py-0 md:pl-6 md:pr-9 md:text-inherit md:opacity-100 md:shadow-[0_20px_70px_rgba(15,23,42,0.14)] md:transition-none md:before:hidden md:dark:shadow-slate-200/10"
     >
       <nav>
         <ul
@@ -116,16 +105,10 @@ whenever(
         <button
           :title="socials.rss.name"
           aria-label="RSSフィードのURLをコピーする"
-          class="relative flex size-8 items-center justify-center rounded before:absolute before:-z-10 before:size-full before:rounded before:bg-slate-200/50 before:opacity-0 before:transition-opacity hover:before:opacity-100 dark:before:bg-white/20"
+          class="relative flex size-8 items-center justify-center rounded before:absolute before:-z-10 before:size-full before:rounded before:bg-primary/10 before:opacity-0 before:transition-opacity hover:before:opacity-100 dark:before:bg-white/20"
           @click="() => rssFeedCopy()"
         >
           <span class="i-ph-rss-bold size-5" />
-          <span
-            :class="[isVisibleRssFeedCopyTooltip ? 'opacity-100' : 'opacity-0']"
-            class="pointer-events-none absolute -top-5 whitespace-nowrap rounded bg-black/70 px-2 py-1 text-xs text-white transition-opacity dark:bg-white/80 dark:text-slate-900"
-          >
-            URLをコピーしました
-          </span>
         </button>
         <Switch
           v-model="isDark"

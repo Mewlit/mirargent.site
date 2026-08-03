@@ -19,12 +19,12 @@ const props = defineProps<HomeBlogProps>()
 
     <div class="flex flex-col gap-8">
       <p
-        class="max-w-2xl text-sm leading-relaxed text-gray-500 dark:text-gray-400"
+        class="max-w-2xl text-sm leading-relaxed text-gray-500 dark:text-white"
       >
         {{ props.description }}
       </p>
 
-      <BlogPostList :limit="5" />
+      <BlogPostList :limit="4" />
     </div>
 
     <div class="mt-6 flex items-center justify-center text-sm">
