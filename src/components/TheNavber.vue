@@ -2,6 +2,7 @@
 import { Switch } from '@headlessui/vue'
 import { useFixedHeader } from 'vue-use-fixed-header'
 import { useClipboardCopy } from '../composables/useClipboardCopy'
+import { useToast } from '../composables/useToast'
 
 // 固定ヘッダー制御
 const headerRef = ref<HTMLElement | null>(null)
@@ -18,7 +19,13 @@ const name = website.value.name
 /** ダークモード管理 */
 const isDark = computed<boolean>({
   get: () => colorMode.value === 'dark',
-  set: (val) => (colorMode.value = val ? 'dark' : 'light'),
+  set: (val) => {
+    colorMode.value = val ? 'dark' : 'light'
+    useToast().addToast({
+      title: `カラーモードを${val ? 'ダーク' : 'ライト'}モードに切り替えました`,
+      type: 'success',
+    })
+  },
 })
 
 /** ソーシャルリンク */
