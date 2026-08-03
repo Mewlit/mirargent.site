@@ -17,19 +17,23 @@ useHead({
 
 <template>
   <Body
-    class="body min-h-screen bg-white text-slate-800 antialiased dark:bg-slate-900 dark:text-slate-100"
+    class="body min-h-screen bg-primary/30 text-slate-800 antialiased dark:bg-slate-900 dark:text-slate-100"
   >
     <SeoDefault />
     <NuxtRouteAnnouncer />
-    <NuxtLoadingIndicator :height="2" :color="website.themeColor" />
+    <NuxtLoadingIndicator
+      :color="website.themeColor"
+      :height="5"
+      :duration="3000"
+      :throttle="1"
+    />
     <CursorFollower />
+    <ToastViewport />
 
     <!-- TheNavber（Fixedで浮いているため、単体で配置） -->
     <TheNavber />
 
-    <!-- 全体コンテンツをギュッと中央に寄せるための枠組み -->
-    <div class="mx-auto max-w-4xl px-4 sm:px-4">
-      <!-- ナビゲーションバーと被らないよう、上部に余白（pt-24など）を確保 -->
+    <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
       <main class="pb-16 pt-24">
         <NuxtPage />
       </main>

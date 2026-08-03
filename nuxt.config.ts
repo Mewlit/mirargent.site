@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   app: {
     head: { titleTemplate: '%pageTitle' },
+    pageTransition: { name: 'page', mode: 'out-in' },
   },
   compatibilityDate: '2026-07-20',
   content: {
@@ -37,6 +38,14 @@ export default defineNuxtConfig({
     '/feed.xml': {
       headers: { 'content-type': 'application/rss+xml; charset=UTF-8' },
     },
+    '/': { prerender: true },
+    '/about': { prerender: true },
+    '/original': { prerender: true },
+    '/blog': { prerender: true },
+    '/blog/**': { prerender: true },
+    '/labs': { prerender: true },
+    '/bags': { prerender: true },
+    '/books': { prerender: true },
   },
   runtimeConfig: {
     public: {
