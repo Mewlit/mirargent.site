@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Switch } from '@headlessui/vue'
 import { useFixedHeader } from 'vue-use-fixed-header'
+import { useClipboardCopy } from '../composables/useClipboardCopy'
 
 // 固定ヘッダー制御
 const headerRef = ref<HTMLElement | null>(null)
@@ -9,8 +10,7 @@ const { styles } = useFixedHeader(headerRef)
 // Composables & State
 const website = useWebsite()
 const colorMode = useColorMode()
-const { copy } = useClipboard({ source: website.value.socials.rss.url })
-const { addToast } = useToast()
+const { copyText } = useClipboardCopy()
 
 /** ウェブサイトの名前 */
 const name = website.value.name
@@ -26,13 +26,7 @@ const socials = website.value.socials
 
 /** RSSフィードのURLをコピーする */
 const rssFeedCopy = async () => {
-  await copy()
-  addToast({
-    title: 'RSSをコピーしました',
-    description:
-      'RSS購読アプリ等に登録することでブログの更新があった際に通知を受け取れます。',
-    type: 'success',
-  })
+  await copyText(website.value.socials.rss.url)
 }
 
 // ナビゲーションメニュー定義（動的データとアイコンを紐付け）

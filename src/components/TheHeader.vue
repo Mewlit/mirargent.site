@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 // Components
 import { Switch } from '@headlessui/vue'
+import { useClipboardCopy } from '../composables/useClipboardCopy'
 
 const website = useWebsite()
 const colorMode = useColorMode()
 const [isVisibleOverlay, toggleOverlay] = useToggle()
-const { copy } = useClipboard({ source: website.value.socials.rss.url })
-const { addToast } = useToast()
+const { copyText } = useClipboardCopy()
 
 /** ウェブサイトの名前 */
 const name = website.value.name
@@ -21,13 +21,7 @@ const socials = website.value.socials
 const menu = website.value.header.menu
 /** RSSフィードのURLをコピーする */
 const rssFeedCopy = async () => {
-  await copy()
-  addToast({
-    title: 'RSSをコピーしました',
-    description:
-      'RSS購読アプリ等に登録することでブログの更新があった際に通知を受け取れます。',
-    type: 'success',
-  })
+  await copyText(website.value.socials.rss.url)
 }
 </script>
 
