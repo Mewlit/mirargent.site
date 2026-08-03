@@ -27,3 +27,14 @@
   opacity: 0;
   transform: translateY(5px);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-leave-active,
+  .page-enter-from,
+  .page-leave-to {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}

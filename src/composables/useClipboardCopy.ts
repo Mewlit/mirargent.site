@@ -5,6 +5,7 @@ export interface ClipboardCopyOptions {
   successDescription?: string
   errorTitle?: string
   errorDescription?: string
+  unsupportedBrowserDescription?: string
 }
 
 const defaultOptions: Required<ClipboardCopyOptions> = {
@@ -13,6 +14,8 @@ const defaultOptions: Required<ClipboardCopyOptions> = {
     'RSS購読アプリ等に登録することでブログの更新があった際に通知を受け取れます。',
   errorTitle: 'RSSのコピーに失敗しました',
   errorDescription: 'クリップボードへの書き込みに失敗しました。',
+  unsupportedBrowserDescription:
+    'このブラウザはClipboard APIに対応していません。',
 }
 
 export const useClipboardCopy = () => {
@@ -22,7 +25,13 @@ export const useClipboardCopy = () => {
     text: string,
     options: ClipboardCopyOptions = {},
   ): Promise<boolean> => {
-    const { successTitle, successDescription, errorTitle, errorDescription } = {
+    const {
+      successTitle,
+      successDescription,
+      errorTitle,
+      errorDescription,
+      unsupportedBrowserDescription,
+    } = {
       ...defaultOptions,
       ...options,
     }
@@ -30,7 +39,7 @@ export const useClipboardCopy = () => {
     if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
       addToast({
         title: errorTitle,
-        description: 'このブラウザはClipboard APIに対応していません。',
+        description: unsupportedBrowserDescription,
         type: 'error',
       })
       return false
