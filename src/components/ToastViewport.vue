@@ -47,14 +47,25 @@ const { toasts, dismissToast } = useToast()
 </template>
 
 <style scoped>
-.toast-enter-active,
-.toast-leave-active {
-  transition: all 0.2s ease;
+.toast-enter-active {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.toast-enter-from,
+.toast-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.toast-enter-from {
+  opacity: 0;
+  transform: translateY(100%) scale(0.8);
+}
+
 .toast-leave-to {
   opacity: 0;
-  transform: translateY(-8px) scale(0.98);
+  transform: translateY(100%) scale(0.9);
+}
+
+.toast-move {
+  transition: transform 0.3s ease;
 }
 </style>

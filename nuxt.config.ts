@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   app: {
     head: { titleTemplate: '%pageTitle' },
+    pageTransition: { name: 'page', mode: 'out-in' },
   },
   compatibilityDate: '2026-07-20',
   content: {
