@@ -73,9 +73,6 @@ function createLine(leader, i) {
   <svg ref="rootRef" class="trail-svg" xmlns="http://www.w3.org/2000/svg" />
 </template>
 <style scoped>
-body {
-  cursor: none;
-}
 .trail-svg {
   position: fixed;
   top: 15px;

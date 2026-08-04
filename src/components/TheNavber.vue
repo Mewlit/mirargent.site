@@ -143,7 +143,7 @@ const items = computed(() => [
         <!-- スペーサー -->
         <li class="flex-1" />
 
-        <!-- アクションエリア（Discord / RSS / ダークモード切替） -->
+        <!-- アクションエリア（Google Form / RSS / ダークモード切替） -->
         <li class="flex items-center gap-1">
           <!-- Google Form リンク -->
           <NuxtLink
