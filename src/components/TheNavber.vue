@@ -38,28 +38,28 @@ const rssFeedCopy = async () => {
 
 // ナビゲーションメニュー定義（動的データとアイコンを紐付け）
 const items = computed(() => [
-  { name: 'Home', path: '/', icon: 'i-ph-house' },
-  { name: 'OriginalHome', path: '/original', icon: 'i-ph-house-simple' },
+  { name: 'Home', path: '/', icon: 'i-mingcute-home-2-line' },
+  { name: 'OriginalHome', path: '/original', icon: 'i-mingcute-home-3-line' },
   {
     name: 'About',
     path: '/about',
-    icon: 'i-ph-files',
+    icon: 'i-mingcute-profile-line',
   },
   {
     name: 'Diary',
     path: '/blog',
-    icon: 'i-ph-pen',
+    icon: 'i-mingcute-book-2-line',
   },
-  { name: 'Lab', path: '/labs', icon: 'i-ph-beer-bottle' },
+  { name: 'Lab', path: '/labs', icon: 'i-svg-spinners-blocks-shuffle-2' },
   {
     name: 'Bags',
     path: '/bags',
-    icon: 'i-ph-bag',
+    icon: 'i-svg-spinners-blocks-shuffle-2',
   },
   {
     name: 'Bookmarks',
     path: '/books',
-    icon: 'i-ph-book',
+    icon: 'i-mingcute-bookmarks-line',
   },
 ])
 </script>
@@ -145,15 +145,16 @@ const items = computed(() => [
 
         <!-- アクションエリア（Discord / RSS / ダークモード切替） -->
         <li class="flex items-center gap-1">
-          <!-- Discord リンク -->
+          <!-- Google Form リンク -->
           <NuxtLink
-            :to="socials.discord.url"
-            :title="socials.discord.name"
-            aria-label="Discordサーバに参加する"
+            :to="socials.form.url"
+            :title="socials.form.name"
+            aria-label="Google Formはこちら"
             target="_blank"
+            rel="noopener noreferrer"
             class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-white/10"
           >
-            <span class="i-simple-icons-discord size-4" />
+            <span class="i-mingcute-document-3-line size-5" />
           </NuxtLink>
 
           <!-- RSS コピーボタン -->
@@ -163,7 +164,7 @@ const items = computed(() => [
             class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-primary/10 dark:hover:bg-white/10"
             @click="rssFeedCopy"
           >
-            <span class="i-ph-rss-bold size-4" />
+            <span class="i-svg-spinners-wifi-fade size-4" />
           </button>
 
           <!-- ダークモードトグル -->
@@ -172,7 +173,9 @@ const items = computed(() => [
             aria-label="カラーモードを切り替える"
             class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-white/10"
           >
-            <span class="i-ph-sun-bold size-4 dark:i-ph-moon-bold" />
+            <span
+              class="i-mingcute-sun-line size-5 dark:i-mingcute-moon-line"
+            />
           </Switch>
         </li>
       </ul>
