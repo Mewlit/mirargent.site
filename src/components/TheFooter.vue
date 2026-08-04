@@ -71,7 +71,7 @@ const rssFeedCopy = async () => {
             class="relative flex size-8 items-center justify-center rounded before:absolute before:size-full before:rounded before:bg-primary/10 before:opacity-0 before:transition-opacity hover:before:opacity-20"
             @click="() => rssFeedCopy()"
           >
-            <span class="i-svg-spinners-wifi-fade size-5" />
+            <span class="i-line-md-rss size-5" />
           </button>
         </div>
       </div>

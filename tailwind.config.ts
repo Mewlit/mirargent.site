@@ -62,6 +62,7 @@ export default <Partial<Config>>{
         'ic',
         'svg-spinners',
         'mingcute',
+        'line-md',
       ]),
     }),
   ],

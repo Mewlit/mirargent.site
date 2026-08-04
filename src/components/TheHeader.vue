@@ -108,7 +108,7 @@ const rssFeedCopy = async () => {
           class="relative flex size-8 items-center justify-center rounded before:absolute before:-z-10 before:size-full before:rounded before:bg-primary/10 before:opacity-0 before:transition-opacity hover:before:opacity-100 dark:before:bg-white/20"
           @click="() => rssFeedCopy()"
         >
-          <span class="i-svg-spinners-wifi-fade size-5" />
+          <span class="i-line-md-rss size-5" />
         </button>
         <Switch
           v-model="isDark"

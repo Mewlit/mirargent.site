@@ -38,28 +38,28 @@ const rssFeedCopy = async () => {
 
 // ナビゲーションメニュー定義（動的データとアイコンを紐付け）
 const items = computed(() => [
-  { name: 'Home', path: '/', icon: 'i-mingcute-home-2-line' },
-  { name: 'OriginalHome', path: '/original', icon: 'i-mingcute-home-3-line' },
+  { name: 'Home', path: '/', icon: 'i-line-md-home-simple' },
+  { name: 'OriginalHome', path: '/original', icon: 'i-line-md-home-md' },
   {
     name: 'About',
     path: '/about',
-    icon: 'i-mingcute-profile-line',
+    icon: 'i-line-md-person-search',
   },
   {
     name: 'Diary',
     path: '/blog',
-    icon: 'i-mingcute-book-2-line',
+    icon: 'i-line-md-calendar',
   },
-  { name: 'Lab', path: '/labs', icon: 'i-svg-spinners-blocks-shuffle-2' },
+  { name: 'Lab', path: '/labs', icon: 'i-line-md-cancel' },
   {
     name: 'Bags',
     path: '/bags',
-    icon: 'i-svg-spinners-blocks-shuffle-2',
+    icon: 'i-line-md-cancel',
   },
   {
     name: 'Bookmarks',
     path: '/books',
-    icon: 'i-mingcute-bookmarks-line',
+    icon: 'i-line-md-link',
   },
 ])
 </script>
@@ -154,7 +154,7 @@ const items = computed(() => [
             rel="noopener noreferrer"
             class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-white/10"
           >
-            <span class="i-mingcute-document-3-line size-5" />
+            <span class="i-line-md-file-document size-5" />
           </NuxtLink>
 
           <!-- RSS コピーボタン -->
@@ -164,7 +164,7 @@ const items = computed(() => [
             class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-primary/10 dark:hover:bg-white/10"
             @click="rssFeedCopy"
           >
-            <span class="i-svg-spinners-wifi-fade size-4" />
+            <span class="i-line-md-rss size-4" />
           </button>
 
           <!-- ダークモードトグル -->
@@ -174,7 +174,8 @@ const items = computed(() => [
             class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-white/10"
           >
             <span
-              class="i-mingcute-sun-line size-5 dark:i-mingcute-moon-line"
+              :key="isDark ? 'dark' : 'light'"
+              class="i-line-md-sun-rising-loop size-5 dark:i-line-md-moon-rising-loop"
             />
           </Switch>
         </li>

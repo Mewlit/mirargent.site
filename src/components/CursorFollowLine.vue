@@ -12,7 +12,12 @@ const tweens = []
 let onMouseMove
 
 onMounted(() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches
+  const hasFinePointer = window.matchMedia('(any-pointer: fine)').matches
+
+  if (prefersReducedMotion || !hasFinePointer) return
 
   pointer.x = window.innerWidth / 2
   pointer.y = window.innerHeight / 2
