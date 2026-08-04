@@ -65,7 +65,7 @@ onUnmounted(() => {
   }
 })
 
-const BALL_SIZE = 40
+const BALL_SIZE = 20
 const BALL_RADIUS = BALL_SIZE / 2
 
 const ballStyle = computed(() => ({

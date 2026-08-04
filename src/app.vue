@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import CursorFollower from '~/components/CursorFollower.vue'
+import CursorFollowLine from './components/CursorFollowLine.vue'
 
 const website = useWebsite()
 
@@ -27,6 +28,7 @@ useHead({
       :duration="3000"
       :throttle="1"
     />
+    <CursorFollowLine />
     <CursorFollower />
     <ToastViewport />
 

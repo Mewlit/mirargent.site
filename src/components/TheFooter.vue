@@ -56,13 +56,14 @@ const rssFeedCopy = async () => {
             <span class="i-simple-icons-github size-5" />
           </NuxtLink>
           <NuxtLink
-            :title="socials.discord.name"
-            :to="socials.discord.url"
-            aria-label="Discordサーバに参加する"
-            class="relative flex size-8 items-center justify-center rounded before:absolute before:size-full before:rounded before:bg-current before:opacity-0 before:transition-opacity hover:before:opacity-20"
+            :title="socials.form.name"
+            :to="socials.form.url"
+            aria-label="Google Formはこちら"
             target="_blank"
+            rel="noopener noreferrer"
+            class="relative flex size-8 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-white/10"
           >
-            <span class="i-simple-icons-discord size-5" />
+            <span class="i-mingcute-document-3-line size-5" />
           </NuxtLink>
           <button
             :title="socials.rss.name"
@@ -70,7 +71,7 @@ const rssFeedCopy = async () => {
             class="relative flex size-8 items-center justify-center rounded before:absolute before:size-full before:rounded before:bg-primary/10 before:opacity-0 before:transition-opacity hover:before:opacity-20"
             @click="() => rssFeedCopy()"
           >
-            <span class="i-ph-rss-bold size-5" />
+            <span class="i-svg-spinners-wifi-fade size-5" />
           </button>
         </div>
       </div>

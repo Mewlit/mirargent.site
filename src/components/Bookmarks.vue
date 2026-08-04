@@ -118,6 +118,26 @@ const bookmarks: Bookmark[] = [
     url: 'https://pages.cloudflare.com/',
     category: 'tools',
   },
+  {
+    label: 'Icons',
+    url: 'https://icones.js.org/',
+    category: 'tools',
+  },
+  {
+    label: 'Google Fonts',
+    url: 'https://fonts.google.com/',
+    category: 'tools',
+  },
+  {
+    label: 'Google Analytics',
+    url: 'https://analytics.google.com/',
+    category: 'tools',
+  },
+  {
+    label: 'Google Search Console',
+    url: 'https://search.google.com/search-console/about',
+    category: 'tools',
+  },
 ]
 
 // カテゴリごとにグループ化する Computed
