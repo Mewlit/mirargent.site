@@ -49,8 +49,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      gtmId: 'GTM-M39N2ZBR',
-      cloudflareImageHash: '',
+      gtmId: process.env.GTM_ID,
+      cloudflareImageHash: process.env.CLOUDFLARE_IMAGE_HASH,
     },
   },
   schemaOrg: {
