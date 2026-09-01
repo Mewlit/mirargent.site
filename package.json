@@ -90,7 +90,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@iconify-json/solar": "1.2.5",
+    "@iconify-json/solar": "1.2.10",
     "gsap": "3.15.0",
     "vue-use-fixed-header": "2.0.3"
   }
