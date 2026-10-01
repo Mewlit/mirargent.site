@@ -17,3 +17,5 @@ strictDepBuilds: true
 minimumReleaseAgeExclude:
   # Renovate security update: postcss@8.5.23
   - postcss@8.5.23
+  # Renovate security update: nuxt@4.5.1
+  - nuxt@4.5.1
